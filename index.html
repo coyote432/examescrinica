@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Busca de Exames</title>
+  <style>
+    /* Estilos gerais */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background-color: #0066cc;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      text-transform: uppercase;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #0066cc;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #0066cc;
+      padding-bottom: 5px;
+    }
+
+    label {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+      color: #444;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: all 0.3s ease-in-out;
+    }
+
+    input[type="text"]:focus {
+      border-color: #0066cc;
+      box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
+      outline: none;
+    }
+
+    .tabela-resultados {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .tabela-resultados th {
+      background-color: #0066cc;
+      color: white;
+      text-align: left;
+      padding: 12px 8px;
+      font-size: 1rem;
+    }
+
+    .tabela-resultados td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #ddd;
+      font-size: 0.95rem;
+    }
+
+    .tabela-resultados tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .tabela-resultados tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .tabela-resultados td:first-child {
+      font-weight: bold;
+      color: #333;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Busca de Exames</h1>
+  </header>
+  <main>
+    <section>
+      <h2>Buscar Exame</h2>
+      <label for="busca">Digite o nome, mnemônico ou valor do exame:</label>
+      <input type="text" id="busca" placeholder="Exemplo: Ácido, A1A, 70" oninput="buscarProdutos()">
+    </section>
+
+    <section class="resultados">
+      <table class="tabela-resultados" id="resultados">
+        <thead>
+          <tr>
+            <th>Nome do Exame</th>
+            <th>Mnemônico</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="3">Os exames aparecerão aqui.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>Desenvolvido por <a href="#">©️Elijunio & IA</a> - INSTITUTO DR. GERLAN GURGEL </p>
+  </footer>
+
+  <script>
+    const conteudoTxt = `Hemograma Completo	;		;	R$ 100,00	: Tipagem sanguinea 	;		;	R$ 40,00	: VHS	;		;	R$ 50,00	: Beta-HCG (Teste de gravidez)	;		;	R$ 50,00	: PSAT	;		;	R$ 100,00	: Aslo	;		;	R$ 40,00	: pcr	;		;	R$ 40,00	: FR	;		;	R$ 40,00	: VDRL	;		;	R$ 50,00	: TC/TS	;		;	R$ 60,00	: Glicemia	;		;	R$ 40,00	: Colesterol Total	;		;	R$ 40,00	: TriglicerÃ­dios	;		;	R$ 40,00	: UrÃ©ia	;		;	R$ 50,00	: Creatinina	;		;	R$ 60,00	: TGO	;		;	R$ 40,00	: TGP	;		;	R$ 40,00	: Ã�cido Ãšrico	;		;	R$ 40,00	: EAS (Urina)	;		;	R$ 50,00	: AlbiminÃºria (urina)	;		;	R$ 40,00	: EPF (Fezes)	;		;	R$ 50,00	: Rota VÃ­rus (Fezes)	;		;	R$ 50,00	: Sangue Oculto (Fezes)	;		;	R$ 50,00	: SecreÃ§Ã£o Vaginal 	;		;	R$ 90,00	: 17 Hidroxi- pregnenolona	;		;	R$ 1.396,00	: 17 Alfa Hidroxiprogesterona	;	17 ALF	;	R$ 110,00	: 2,5- Hexanodiona urinÃ¡rio	;	HXD	;	R$ 112,00	: 3- Alfa androstanediol glucoronide	;	3ALFA	;	R$ 135,00	: ACTH apÃ³s supressÃ£o com dexametasona	;		;	R$ 90,00	: ACTH, HormÃ´nio adrenocorticotrÃ³fico	;	ACTH	;	R$ 102,00	: HormÃ´nio anti mulleriano	;		;	R$ 1.818,00	: AMP ciclico, urina de 24 horas	;	AMP	;	R$ 274,00	: Acetilcolina anticorpo anti- receptor	;		;	R$ 978,00	: Acetilcolinesterase eritrocitÃ©ria	;	ACOLI	;	R$ 114,00	: Acetona, soro 	;	ACETONA	;	R$ 1.420,35	: Acetona, urina final jorn. Trab	;	ACETO	;	R$ 118,00	: Acido citrico	;	ACCIT	;	R$ 100,00	: Acido delta- amino evulinico	;		;	R$ 70,00	: Acido delta- aminolevulinico- ALA-U	;	ALAU	;	R$ 55,00	: Acido fenilglioxilico na urina de final de jornada	;		;	R$ 110,00	: Acido fÃ²lico	;	AFOL	;	R$ 80,00	: Acido metil hipurico( para xilenos), final jorn	;	MATIL	;	R$ 45,00	: Acido trans- muconico	;	TRAA	;	R$ 132,00	: Acido tricloroacÃ©tico	;	TRIA	;	R$ 136,18	: Acido valprÃ´ico	;	AVAL	;	R$ 100,00	: Acido vanil mandÃ©lico	;	VMA	;	R$ 70,00	: Acido Ãºrico	;	AURIC	;	R$ 40,00	: Acido Ã¼rico urinÃ©rio, 24 horas	;	ACUR 1	;	R$ 60,00	: Acido graxos (gordura fecal)	;	PGF	;	R$ 246,00	: Adenovirus pesquisa nas fezes	;		;	R$ 190,00	: Albumina	;	ALB	;	R$ 40,00	: Aldolase	;	ALD	;	R$ 80,00	: Aldosterona	;	ALDO	;	R$ 106,00	: Alfa 1 antitripsina, fezes	;	ALFAF	;	R$ 120,00	: Alfa 1 antitripsina, soro	;	A1A	;	R$ 116,00	: Alfa 1 glicoproteina acida (Mucoproteina)	;	A1GLI	;	R$ 70,00	: Alfa fenoproteina	;	AFETO	;	R$ 100,00	: Aluminio sÃ©rico	;	ALU	;	R$ 100,00	: Amilase	;	AMIL	;	R$ 40,00	: AminoÃ©cidos, cromatografia (screening qualitativo)	;	AMINO	;	R$ 100,00	: AminoÃ¡cidos, determinaÃ§Ã£o quantitativa- plasma	;	AMIQT	;	R$ 1.348,00	: Amiodarona	;	AMIOD	;	R$ 928,00	: Amitriptilina	;		;	R$ 840,00	: Androstenediona	;	ANDRO	;	R$ 130,00	: Anfetaminas	;	ANFE	;	R$ 146,00	: Anti- Beta 2 Glicoproteina, lgG e lgM	;	B2GLlCO	;	R$ 455,00	: Anti CCP	;	CCP	;	R$ 210,00	: Anti- JO1	;	JO1	;	R$ 115,00	: Anti LKM 1	;	LKM	;	R$ 70,00	: Anti- RNP (U1- RNP)	;	RNP	;	R$ 50,00	: Anti - SM	;	SM	;	R$ 100,00	: Anti- SSA (Ro)	;	SSA	;	R$ 70,00	: Anti- SSB (LA)	;	SSB	;	R$ 70,00	: Anti -TPO, anti mocrossomal	;	TPO	;	R$ 90,00	: Anti xa, atividade	;		;	R$ 840,00	: Anti- espematozÃ³ide	;	FERTI	;	R$ 110,00	: Anti- gliadina(glÃºten)- IgA	;	AGA	;	R$ 90,00	: Anti- gliadina(glÃºten)- IgG	;	AGG	;	R$ 90,00	: Anti- gliadina(glÃºten)- IgM	;	AGM	;	R$ 196,00	: Anti Membrana basal glomerular	;		;	R$ 182,00	: Anti- mitocÃ´ndria	;	MITO	;	R$ 150,00	: Anti- mÃºsculo lisÃ³	;	MUSCU	;	R$ 100,00	: Anti- tireoglobulina	;	ACAT	;	R$ 120,00	: Anti- transglutaminase IgA	;	TRANS	;	R$ 256,00	: Anti- transglutaminase IgG	;	TRANSG	;	R$ 256,00	: Anti-transglutaminase tecidual IgA	;		;	R$ 364,00	: Anti DNA de dupla hÃ©lice ou nativo	;	DNAIF	;	R$ 55,00	: Anti DNA de hÃ©lice simples	;	DNA	;	R$ 55,00	: Anti Dnase B	;	DNASEB	;	R$ 248,00	: Anti RNA polimerase 1 11	;		;	R$ 1.588,00	: Anti antÃ­geno IgG hepÃ¡tico solÃºvel fÃ­gado/ pÃ¢ncreas	;		;	R$ 1.296,00	: Anti citoplama de neutrÃ³filos- ANCA	;	ANCA	;	R$ 140,00	: Antibiograma / urucultura	;	ANTIB	;	R$ 200,00	: Anticoagulante lÃºpico	;	LUPIC	;	R$ 120,00	: Anticorpo Anti Ilhotas de Langerhans	;	AAI	;	R$ 275,00	: Anticorpo Anti- Histona	;		;	R$ 204,00	: Anticorpo Anti-Tiroquinase (Anti Musk)	;		;	R$ 1.035,00	: Anticorpo anti-receptor de TSH, TRAB	;	TRAB	;	R$ 200,00	: Anticorpos Anti- Actina	;	AAA	;	R$ 210,00	: Anticorpos Anti EndomÃ­sio IgA	;	ENDOA	;	R$ 128,00	: Anticorpos Anti EndomÃ­sio IgG	;	ENDOG	;	R$ 128,00	: Anticorpos Anti EndomÃ­sio IgM	;	ENDOM	;	R$ 128,00	: Anticorpo IgA Anti- Beta 2 GlicoproteÃ­na 1	;		;	R$ 200,00	: Anticorpos IgA Gliadina Deaminada	;		;	R$ 225,00	: Anticorpos IgE especÃ­fico cefalosporinas	;		;	R$ 352,00	: Anticorpos IgE vitamina B12	;		;	R$ 478,00	: Anticorpos IgG Anti- Chlamydia Psittaci	;		;	R$ 318,00	: Anticorpos IgG Schistossomose	;		;	R$ 100,00	: Anticorpos IgG anti bartonella quintana	;		;	R$ 810,00	: Anticorpos IgG anti giÃ¡rdia lamblia	;		;	R$ 362,00	: Anticorpos IgG anti vÃ­rus sincicial respiratÃ³rio	;		;	R$ 262,00	: Anticorpos iGg gliadina deaminada	;		;	R$ 224,00	: Anticorpos Anti- GAD	;		;	R$ 475,00	: Anticorpos Anti Ml 2	;		;	R$ 950,00	: Anticorpos anti- Shigella	;	SHIGELLA	;	R$ 265,00	: Anticorpos anti- centrÃ´mero	;	CENTRO	;	R$ 95,00	: Anticorpos anti -insulina	;	ACINS	;	R$ 148,00	: Anticorpos anti difteria IgG	;		;	R$ 340,00	: Anticorpos anti nucleossomo	;		;	R$ 170,00	: Anticorpos anti receptor de insulina	;		;	R$ 3.440,00	: Anticorpos irregulares	;	IRREG	;	R$ 330,00	: Antiescleroderma, SCL-70	;	SCL70	;	R$ 80,00	: Antiestreptolisina O	;	ASLO	;	R$ 40,00	: Antigeno carcinoembriogÃªnico (CEA)	;	CEA	;	R$ 100,00	: AnÃ¡tomo patolÃ³gico peÃ§a cirÃºrgica grande	;	ANAT9	;	R$ 390,00	: AnÃ¡tomo patolÃ³gico simples	;	ANAT4	;	R$ 130,00	: ApolipoproteÃ­na A-1	;	APOA	;	R$ 70,00	: ArsÃªnico	;		;	R$ 200,00	: ApilipoproteÃ­na B	;	APOB	;	R$ 60,00	: Aspergillus SP, anticorpos	;	ASPER	;	R$ 1.010,00	: Aspergillus fumigatus anticorpos IgG	;		;	R$ 210,00	: BNP- PeptÃ­deo NatriurÃ©tico	;	BNP	;	R$ 470,00	: Bacilos Ã¡lcool- Ã¡cido resistentes	;	BAAR	;	R$ 40,00	: Bacilos Ã¡lcool- Ã¡cido resistentes 1Â° amostra	;	BAARI	;	R$ 40,00	: Bacilos Ã¡lcool- Ã¡cido resistentes 2Â° amostra	;	BAAR2	;	R$ 40,00	: Bacilos Ã¡lcool- Ã¡cido resistentes- 3Â° amostra	;	BAAR3	;	R$ 40,00	: Bacterioscopia Gram	;	GRAM	;	R$ 40,00	: Banda oligoclonal lÃ­quor e soro	;		;	R$ 890,00	: Beta HCG qualitativo- BHCG	;	BHCG	;	R$ 70,00	: Beta HCG quantitativo- BHCG	;	BHCGQ	;	R$ 140,00	: Beta-2- Microglobulina	;	BETA2	;	R$ 100,00	: Bilirrubinas totais a fraÃ§Ãµes	;	BILI	;	R$ 80,00	: BioquÃ­mica do lÃ­quor	;	ICRB	;	R$ 180,00	: Biotinidase	;	BIOT	;	R$ 100,00	: BiÃ³psia simples- VeterinÃ¡rio	;	V-BS	;	R$ 410,00	: Blastomicose sul- americana	;		;	R$ 350,00	: Blastomicose, anticorpos	;	BLAST	;	R$ 320,00	: Blastomicose, pesquisa	;	BLAS	;	R$ 70,00	: Bordetella, Anticorpos IgG 	;	BORDG	;	R$ 260,00	: Bordetella, Anticorpos IgM	;	BORDM	;	R$ 260,00	: Brucelose	;	BRU	;	R$ 80,00	: Brucelose IgG, Anticorpos	;	BRUCE	;	R$ 250,00	: Brucelose IgM, Anticorpos	;	BRUCM	;	R$ 250,00	: CA 125	;	CA125	;	R$ 80,00	: CA 15-3	;	CA153	;	R$ 95,00	: CÃ¡lcio total	;		;	R$ 40,00	: CA 19-9	;	CA199	;	R$ 80,00	: CA 50	;	CA50	;	R$ 155,00	: CA 72â€”4	;	CA724	;	R$ 100,00	: Calcitonina	;	CT	;	R$ 90,00	: Calprotectina fecal	;		;	R$ 350,00	: Capacidade de LigaÃ§Ã£o do Ferro	;	CTF	;	R$ 50,00	: Carbamazepina	;	CARBA	;	R$ 110,00	: Carboxihemoglobina	;	CARBO	;	R$ 45,00	: Cardiolipina- IgA	;	CARDIA	;	R$ 90,00	: Cardiolipina- IgG	;	CARDG	;	R$ 100,00	: Cardiolipina- IgM	;	CARDM	;	R$ 150,00	: CariÃ³tipo banda G	;	CARIB	;	R$ 1.050,00	: Catecolaminas plasmÃ¡ticas	;		;	R$ 520,00	: Catecolaminas, 24 horas	;	CATEC	;	R$ 320,00	: Ceruloplasmina	;	CERUL	;	R$ 100,00	: Chagas- IgG(lFl)	;	CHAGG	;	R$ 100,00	: Chagas- IgM(lFl)	;	CHAGM	;	R$ 100,00	: Chagas- Machado Guerreiro	;	CHAGA	;	R$ 70,00	: Chlamydia, Anticorpos IgG	;	CLAM	;	R$ 150,00	: Chlamydia, Anticorpos IgM	;	CLAMM	;	R$ 180,00	: Chlamydia, detecÃ§Ã£o por PCR	;	CLPCR	;	R$ 250,00	: Chlamyda, pesquisa (ImunofluorescÃªncia)	;	CLAMIF	;	R$ 100,00	: Chumbo sanguÃ­neo	;	CHUMB	;	R$ 100,00	: Chumbo, urina final jorn. Trab	;	CHURI	;	R$ 80,00	: Chumbo, urina recente	;	CHUMBO	;	R$ 80,00	: Ciclosporina	;	CICLO	;	R$ 135,00	: Cisticercose- Anticorpos IgG	;	CISTS	;	R$ 200,00	: Citologia em meio lÃ­quido	;	ANAT20	;	R$ 220,00	: Citologia oncÃ³tica de LÃ­quidos e PunÃ§Ã£o	;	ANAT5	;	R$ 130,00	: Citologia oncÃ³tica geral	;	V-COG	;	R$ 570,00	: CitomegalovÃ­rus DNA quantitativo	;		;	R$ 920,00	: CitomegalovÃ­rus qualitativo por PCR	;		;	R$ 780,00	: CitomegalovÃ­rus, IgG	;	CMVG	;	R$ 90,00	: CitomegalovÃ­rus, IgG Avidez	;	CMVGAV	;	R$ 235,00	: CitomegalovÃ­rus, IgM	;	CMVM	;	R$ 90,00	: CitopatolÃ³gico cÃ©rvico- vaginal oncÃ³tico	;	PAPA	;	R$ 150,00	: CitopatolÃ³gico cÃ©rvico- vaginal oncÃ³tico	;	PAPA-1	;	R$ 150,00	: Citrato urinÃ¡rio,24 horas	;	CITRA	;	R$ 70,00	: Clearence de creatinina	;	CLECR	;	R$ 70,00	: Clonazepan- dosagem	;	CLONA	;	R$ 300,00	: Cloro	;	CL	;	R$ 40,00	: Coagulograma	;	COAG	;	R$ 60,00	: Coagulograma completo	;	COAGT	;	R$ 70,00	: Cobre	;	COBRE	;	R$ 100,00	: CEA	;	CEA	;	R$ 100,00	: CocaÃ­na	;	COCA	;	R$ 210,00	: CocaÃ­na inativo	;		;	R$ 150,00	: Cofator da ristocetina	;	RISTOC	;	R$ 620,00	: Colesterol HDL	;	HDL	;	R$ 40,00	: Colesterol LDL	;	Zidl	;	R$ 40,00	: Colesterol LDL	;	LDL	;	R$ 40,00	: Colesterol total	;	COLES	;	R$ 40,00	: Colesterol VLDL	;	zVLDL	;	R$ 40,00	: Colesterol VLDL	;	VLDL	;	R$ 40,00	: Colinesterase	;	COLIN	;	R$ 90,00	: Complemento C1q	;	C1Q	;	R$ 260,00	: Complemento C2	;	C2F	;	R$ 240,00	: Complemento C3	;	C3	;	R$ 90,00	: Complemento C3 A	;		;	R$ 380,00	: Complemento C4	;	C4	;	R$ 100,00	: Complemento C5	;		;	R$ 275,00	: Complemento CH-1OO	;	CH1OO	;	R$ 50,00	: Complemento Ch-50	;	CH50	;	R$ 95,00	: Coombs direto	;	COODI	;	R$ 50,00	: Coombs indireto	;	COOIN	;	R$ 50,00	: CoprolÃ³lico funcional	;	COPRO	;	R$ 70,00	: Cortisol (16 horas)	;	CORT16	;	R$ 100,00	: Cortisol basal	;	CORT	;	R$ 100,00	: Cortisol salivar manhÃ£ inativo	;		;	R$ 140,00	: Cortisol salivar manhÃ£, tarde ou noite	;		;	R$ 140,00	: Cortisol urinÃ¡rio, 24 horas	;	CORTU	;	R$ 100,00	: Cotinina / Nicotina	;		;	R$ 220,00	: Creatina	;	CINA-S	;	R$ 120,00	: Creatina Fosfoquinase(CPK)	;	CPK	;	R$ 60,00	: Creatina Quinase (CK-MB)	;	CK-MB	;	R$ 70,00	: Creatinina	;	CREAT	;	R$ 60,00	: Creatinina urinÃ¡ria, amostra isolada	;	CREA1	;	R$ 50,00	: Crioglobulinas pesquisa	;		;	R$ 55,00	: Cromatina sexual	;	CROMS	;	R$ 50,00	: Cromo sÃ©rico	;	CROMO	;	R$ 115,00	: Cromo, urina final jorn. Trab	;	CROMU	;	R$ 90,00	: Cryptococcus quantitativo	;		;	R$ 470,00	: Cryptococcus neoformas aglutinaÃ§Ã£o direta	;		;	R$ 320,00	: Cultura bacteriana	;	CULT	;	R$ 100,00	: Cultura de escarro	;		;	R$ 100,00	: Cultura de fezes coprocultura	;		;	R$ 100,00	: Cultura de lÃ­quido Pleural	;	CUPLE	;	R$ 100,00	: Cultura de LÃ­quido seminal	;	CUESP	;	R$ 100,00	: Cultura de LÃ­quido Sinovial	;	CUSIN	;	R$ 100,00	: Cultura de LÃ­quor	;	CULCR	;	R$ 100,00	: Cultura de SecreÃ§Ã£o	;	CUSEC	;	R$ 100,00	: Cultura de secreÃ§Ã£o axilar	;		;	R$ 100,00	: Cultura de SecreÃ§Ã£o Nasal	;	CUNAZ	;	R$ 100,00	: Cultura de SecreÃ§Ã£o Ocular	;	CULOC	;	R$ 100,00	: Cultura de SecreÃ§Ã£o Pulmonar	;	CULPU	;	R$ 100,00	: Cultura de SecreÃ§Ã£o Uretral	;	CUURE	;	R$ 100,00	: Cultura de SecreÃ§Ã£o Vaginal	;	CULVAG	;	R$ 100,00	: Cultura de SecreÃ§Ã£o de Orofaringe	;	CUORO	;	R$ 100,00	: Cultura de SecreÃ§Ã£o de Ouvido	;	CULOT	;	R$ 100,00	: Cultura de secreÃ§Ã£o vaginal	;		;	R$ 100,00	: Cultura de Escarro	;	CULES	;	R$ 100,00	: Cultura de Fezes(copocultura)	;	CUL	;	R$ 100,00	: Cultura de Urina (urocultura)	;	CULCC	;	R$ 100,00	: Cultuta de Urina- 1Âº jato	;	CULJA	;	R$ 100,00	: Cultura para Fungos	;	CULTF	;	R$ 150,00	: Curva de Fragilidade OsmÃ³tica das HemÃ¡cias	;	FOH	;	R$ 150,00	: Curva de Insulina/ glicose (atÃ© 120)	;	INSGLl5	;	R$ 200,00	: Curva do FSH- HormÃ´nio folÃ­culo estimular	;	CURVAFSH	;	R$ 145,00	: Curva do HGH- HormÃ´nio do crescimento	;	HGHCURVA	;	R$ 420,00	: Curva do LH- HormÃ´nio luteinizante	;	CURVALH	;	R$ 145,00	: Curva glicÃªmica (3 dosagens)	;	CURG3	;	R$ 185,00	: Curva GlicÃªmica (4 dosagens)	;		;	R$ 110,00	: Curva GlicÃªmica (5 dosagens)	;		;	R$ 90,00	: Curva glicÃªmica gestacional	;		;	R$ 195,00	: Curva insulÃ­nica	;		;	R$ 150,00	: CÃ¡dmio, urina final jorn. Trab	;	CAD	;	R$ 100,00	: CÃ¡lcio	;	CA	;	R$ 50,00	: CÃ¡lcio IÃ³nico	;	CAI	;	R$ 60,00	: CÃ¡lcio urinÃ¡rio,24 horas	;	CAU24	;	R$ 40,00	: CÃ¡lcio urinÃ¡rio, anÃ¡lise 	;	CALCU	;	R$ 60,00	: CÃ©lula parietal	;	ACP	;	R$ 140,00	: CÃ©lulas LE	;	LE	;	R$ 40,00	: CÃ©lulas NK, determinaÃ§Ã£o do CD 56+; CD16	;		;	R$ 260,00	: CÃ¡lcio sÃ©rico	;		;	R$ 40,00	: D-DÃ­mero	;	DIMER-D	;	R$ 330,00	: Dehodroepiandrosterona- DHES	;	DHES	;	R$ 110,00	: Dehodroepiandrosterona sulfato- DHEAS	;	DHEAS	;	R$ 90,00	: Dengue antÃ­geno NS1	;		;	R$ 240,00	: Dengue, Anticorpos IgM	;	DENGM	;	R$ 140,00	: Dengue sorologia	;	DENGUE	;	R$ 230,00	: Desidrogenase lÃ¡tica- LDH	;	LDH	;	R$ 50,00	: DetecÃ§Ã£o de Pneumoscystis Carinii	;	PPCA	;	R$ 80,00	: DetecÃ§Ã£o do vÃ­rus da influenza A (H1N1)	;		;	R$ 700,00	: DetecÃ§Ã£o qualitativa de CoronavÃ­rus	;		;	R$ 560,00	: DiagnÃ³stico molecular CoronavÃ­rus Covid 19 Inativo	;		;	R$ 560,00	: Diazepan	;		;	R$ 405,00	: Digoxina	;	DIGOX	;	R$ 100,00	: Dihidrotestosterona- DHT	;	DHT	;	R$ 165,00	: Dihidrotestosterona- DHT inativo	;		;	R$ 165,00	: Dimorfismo eritrocitÃ¡rio	;	DIMORF	;	R$ 50,00	: DoenÃ§a sexualmente transmissÃ­vel PCR	;		;	R$ 420,00	: Echinococcus granulosos IgG	;		;	R$ 360,00	: Echinococcus granulosos IgM	;		;	R$ 360,00	: Eletroforese de hemoglobina	;	ELEHB	;	R$ 100,00	: Eletroforese de lipoproteÃ­nas	;	ELEL	;	R$ 110,00	: Eletroforese de proteÃ­nas	;	ELE2	;	R$ 100,00	: Eletroforese de proteÃ­nas, urina jato mÃ©dio	;	ELEU	;	R$ 100,00	: Enzima conversora de angiotensina (ECA)	;		;	R$ 390,00	: Epstein Barr VÃ­rus- IgG	;	EBG	;	R$ 100,00	: Epstein Barr VÃ­rus- IgM	;	EBM	;	R$ 100,00	: Eritrograma	;	ERIT	;	R$ 50,00	: Eritropoietina	;	ERITP	;	R$ 260,00	: Espermograma inativo	;	ESPER	;	R$ 90,00	: Espermograma automatizado	;	ESPERAUT	;	R$ 150,00	: Estradiol (E2) (realizado no apoio)	;	ESTRAA	;	R$ 100,00	: Estradiol, 17 beta	;		;	R$ 90,00	: Estriol E3	;	ESTRI	;	R$ 120,00	: Estrona El	;	Ã‰STRO	;	R$ 120,00	: Etanol	;	ETANO	;	R$ 100,00	: Exame Ã¡ fresco	;	EFR	;	R$ 90,00	: FSH, HormÃ´nio FolÃ­culo Estimulante	;	FSH	;	R$ 80,00	: Fator V da CoagulaÃ§Ã£o	;	FAT5	;	R$ 100,00	: Fator V de Leiden e mutaÃ§Ã£o da protombina	;		;	R$ 675,00	: Fator V de Leiden dor PCR- mutaÃ§Ã£o G1691A	;	FVPCR	;	R$ 510,00	: Fator VII	;	FA7	;	R$ 200,00	: Fator VIII	;	F8	;	R$ 175,00	: Fator X da coagulaÃ§Ã£o	;	FX	;	R$ 300,00	: Fator XII	;	FXll	;	R$ 265,00	: Fator anti- nuclear - FAN	;	FAN	;	R$ 60,00	: Fator de Von Willebrand, antigÃªnico	;	FVWI	;	R$ 285,00	: Fator ReumatÃ³ide	;	FR	;	R$ 40,00	: Fator rho(D)	;	FRH	;	R$ 30,00	: Febre amarela IgG e IgM	;		;	R$ 1.100,00	: FÃªnilalanina plasmÃ¡tica	;	FENILA	;	R$ 208,00	: FenitoÃ­na	;	FENOT	;	R$ 110,00	: Fenobarbital	;	FENOB	;	R$ 110,00	: Fenol, urina final jorn. Trab	;	FENOL	;	R$ 90,00	: Ferritina	;	FERRI	;	R$ 80,00	: Ferro sÃ©rico	;	FERRO	;	R$ 70,00	: FibrinogÃªnio	;	FIBRI	;	R$ 80,00	: luoreto pÃ³s jornada	;		;	R$ 70,00	: Filaria, sorologia	;	FILARI	;	R$ 200,00	: Fosfatase alcalina	;	FAL	;	R$ 50,00	: Fosfatase alcalina fraÃ§Ã£o Ã³ssea	;	FALOS	;	R$ 310,00	: Fosfatase Ã¡cida total	;	FAC	;	R$ 50,00	: Fosfatidilserina, Anticorpos IgM, lgG e IgA	;	FFG MA	;	R$ 2.230,00	: FosfolipÃ­dios	;	FOSFL	;	R$ 50,00	: Fragilidade capilar,prova do laÃ§o	;	FC	;	R$ 50,00	: Frutosamina	;	FRU	;	R$ 60,00	: Frutose	;	FRUTO	;	R$ 60,00	: Frutose urinaria	;		;	R$ 100,00	: fungos- antifungigrama	;	CCTF	;	R$ 150,00	: FÃ³sforo	;	FOSFO	;	R$ 50,00	: FÃ³sforo urinÃ¡rio, 24 horas	;	FOSFU	;	R$ 50,00	: Gama-glutamil transferase (GGT)	;	GGT ou GT	;	R$ 50,00	: Gastrina	;	GASTR	;	R$ 110,00	: Giardia pesquisa	;		;	R$ 420,00	: Glicemia apÃ³s sobrecarga com glicose	;	GLISO	;	R$ 80,00	: Glicose	;	GLI	;	R$ 40,00	: Glicose pÃ³s prandial	;	G-pp	;	R$ 40,00	: Glicose, 1 hora apÃ³s dextrose	;	Gl	;	R$ 50,00	: Glicose,2 horas apÃ³s dextrose	;	G2	;	R$ 50,00	: Glicose, 3 horas apÃ³s dextrose	;	G3	;	R$ 50,00	: Glicose-6-fosfato desidrogenase G6PD, quantitativo	;	G6PD	;	R$ 120,00	: Glicose-6-fosfato desidrogenase G6PD, qua	;	G6PDSA	;	R$ 120,00	: GlicosÃºria, urina de 24 horas	;	GLU	;	R$ 40,00	: Globulina ligadora de hormÃ´nio sexual	;	SHBG	;	R$ 145,00	: Globulina Ligadora de tiroxina- TBG	;	TBG	;	R$ 170,00	: Gordura fecal	;	GORDUF	;	R$ 40,00	: Grupo sanguÃ­neo	;	GS	;	R$ 40,00	: HGH- HormÃ´nio de crescimento	;	HGH	;	R$ 90,00	: HIV- Western Blot	;	WHIV	;	R$ 500,00	: HIV1 + HIV2 (determinaÃ§Ã£o conjunta)	;	HIV	;	R$ 80,00	: HIV2 + HIV2(determinaÃ§Ã£o conjunta)	;	HIV-INATIV	;	R$ 100,00	: HIV1- QuantificaÃ§Ã£o por PCR	;	HIVQT	;	R$ 1.800,00	: HPV de alto e baixo risco, captura hÃ­brida	;	HPV	;	R$ 560,00	: HTLV l/II- Anticorpos	;	HTLV1	;	R$ 110,00	: Haptoglobina	;	HAPTO	;	R$ 70,00	: Helicobacter pylori- IgG	;	H PG	;	R$ 170,00	: Helicobacter pyjori- IgM	;	HPM	;	R$ 140,00	: lematÃ³crito	;	HEMAT	;	R$ 40,00	: lemocultura	;	HEMOC	;	R$ 130,00	: emocultura automatizada	;	HEMOA	;	R$ 130,00	: hemocultura, 1Â°amostra	;	HEMOC1	;	R$ 130,00	: hemocultura,2Â° amostra	;	HEMOC2	;	R$ 130,00	: Hemocultura,3Â° amostra	;	HEMOC3	;	R$ 130,00	: hemoglobina	;	HB	;	R$ 40,00	: Hlab27	;	HLAB 27	;	R$ 390,00	: Hemoglobina glicolisada (HbA1c)	;	HBGLI	;	R$ 80,00	: Hemograma -VeterinÃ¡rio	;	HEMOVET	;	R$ 100,00	: Hemograma Completo	;	HEMO	;	R$ 100,00	: Hemoparasitas,pesquisa- VeterinÃ¡rio	;	V-HEPA	;	R$ 80,00	: HemossedimentaÃ§Ã£o, VHS 1Â°/ 2Â° hora	;	VHS2	;	R$ 50,00	: HemossedimentaÃ§Ã£o, VHS lÃª hora	;	VHS	;	R$ 50,00	: HemÃ¡cias (eritrÃ³citos)	;	HM	;	R$ 30,00	: HemÃ¡cias fecais, pesquisa	;	HEMAF	;	R$ 40,00	: Hepatite A- HVA- IgG	;	HVAG	;	R$ 100,00	: Hepatite A- HVA- IgM	;	HVAM	;	R$ 100,00	: Hepatite B- DetecÃ§Ã£o por PCR	;	HBPCR	;	R$ 410,00	: Hepatite B genotipagem	;		;	R$ 640,00	: Hepatite B- HBc IgG	;	HBCG	;	R$ 110,00	: Hepatite B-Hbc IgM	;	HBCM	;	R$ 110,00	: Hepatite B- Hbe (anti-Hbe)	;	HBE	;	R$ 70,00	: Hepatite B- HBeAg (antÃ­geno "E")	;	HBEAG	;	R$ 110,00	: Hepatite B- HBsAg (realizado no apoio)	;	HBSAGA	;	R$ 80,00	: Hepatite B- QuantificaÃ§Ã£o por PCR (tubo ppt)	;	HBQUA	;	R$ 700,00	: Hepatite B- anti "C" total	;	HBCTOT	;	R$ 70,00	: Hepatite B- anti Hbs	;	HBS	;	R$ 70,00	: Hepatite C- DetecÃ§Ã£o por PCR (tubo hemo) 	;	HCVQL	;	R$ 550,00	: Hepatite C- Genotipagem	;	HCVGE	;	R$ 750,00	: Hepatite C- QuantificaÃ§Ã£o por PCR	;	HCVQT	;	R$ 750,00	: Hepatite C- anti HCV (realizado no apoio)	;	HCVA	;	R$ 80,00	: Hepatite Delta carga viral	;		;	R$ 1.010,00	: Hepatite Delta qualitativa	;		;	R$ 850,00	: Hepatite Delta Anti- HDV IgG	;	HDV	;	R$ 130,00	: Hepatite Delta IgM	;		;	R$ 330,00	: Hepatite E, anti HEV IgG	;		;	R$ 400,00	: Hepatite E, anti HEV IgM	;		;	R$ 360,00	: Herpes simples 1 e 2- IgG	;	HER1G	;	R$ 100,00	: Herpes simples 1 e 2- IgM	;	HER1M	;	R$ 100,00	: Herpes simples 2 IgG	;		;	R$ 110,00	: Herpes simples 2 IgM	;		;	R$ 160,00	: Herpes zoster- IgG- Varicela Zoster anti IgG	;	HERPZG	;	R$ 130,00	: Herpes zoster- IgM- Varicela Zoster anti IgM	;	HERPZM	;	R$ 160,00	: Herpes vÃ­rus simples 1 e 2 PCR	;		;	R$ 790,00	: Hidatidose- Anticorpos IgG	;	HIDAT	;	R$ 460,00	: Histamina	;	HISTAM	;	R$ 670,00	: HLa DQ2 e DQ8	;		;	R$ 610,00	: HomocisteÃ­na	;	HOMI	;	R$ 140,00	: IGFBP-3-proteÃ­na ligadora IGF-I tipo 3	;	IGFBP	;	R$ 148,00	: IgE, Abacaxi (F210)	;	F210	;	R$ 70,00	: IgE, Abelha, Veneno(ll)	;	l1	;	R$ 70,00	: IgE,Alfa-lactoalbumina (F76)	;	F76	;	R$ 70,00	: IGE -Total	;		;	R$ 70,00	: IgE, Ã�caros- AlÃ©rgeno Maior(D202)	;	D202	;	R$ 70,00	: IgE, Ã�caros- Blomia tropicalis(D201)	;	D201	;	R$ 70,00	: IgE, Ã�caros-D.farinae(D2)	;	D2	;	R$ 70,00	: E, Ã�caros-D.pteronyssinus(D1)	;	Dl	;	R$ 70,00	: IgE, Ã�caros- Tropomiosina(D205)	;	D205	;	R$ 70,00	: Imunoeletroforese de proteÃ­nas sÃ©ricas	;	IMUNO	;	R$ 100,00	: Imunoeletroforese de proteÃ­nas,urina 24 horas	;	IMUNOU	;	R$ 450,00	: Imunoglobulina A- IgA	;	IGA	;	R$ 100,00	: Imunoglobulina D- IgD	;		;	R$ 190,00	: Imunoglobulina E- IgE	;	IGE	;	R$ 100,00	: Imunoglobulina G- IgG	;	IGG	;	R$ 100,00	: Imunoglobulina M- IgM	;	IGM	;	R$ 180,00	: Indice de Homa- IR	;	HOMAIR	;	R$ 50,00	: Indice de saturaÃ§Ã£o de transferrina	;	TIBC	;	R$ 90,00	: Inibidor de Cl esterase, quantitativo	;	ESTER	;	R$ 210,00	: Inibina B	;		;	R$ 1.800,00	: Insulina	;	INSUL	;	R$ 190,00	: Insulina Livre	;		;	R$ 310,00	: Insulina pÃ³s prandial	;	INSUP	;	R$ 70,00	: Insulina 2 horas apÃ³s dextrose	;		;	R$ 220,00	: IntolerÃ¢ncia a lactose, Teste genÃ©tico	;	LACTA	;	R$ 480,00	: lodo protÃ©ico	;		;	R$ 240,00	: lodo 24 horas	;		;	R$ 540,00	: JC VÃ­rus, BK vÃ­rus, detecÃ§Ã£o por PCR	;		;	R$ 950,00	: QAPPA cadeia leve	;		;	R$ 140,00	: QAPPA e Lambda, cadeia leve livre	;		;	R$ 1.040,00	: 	;		;		: LH (realizado no apoio)	;	LHA	;	R$ 80,00	: Lambda cadeia leve	;		;	R$ 140,00	: Lamotrigina	;	LAMT	;	R$ 470,00	: Leishmaniose-lgG	;	LEIS	;	R$ 70,00	: Leishmaniose-lgM	;	LEISM	;	R$ 70,00	: Leptina	;	LEPT	;	R$ 190,00	: Leptospirose	;	LEPTA	;	R$ 210,00	: Leptospirose, Anticorpos IgG	;	LEPTG	;	R$ 130,00	: Leptospirose, Anticorpos IgM	;	LEPTM	;	R$ 100,00	: Leucograma	;	LEUCO	;	R$ 90,00	: LeucÃ³citos fecais,pesquisa	;	LEUCOF	;	R$ 40,00	: Leveduras	;	LEVED	;	R$ 40,00	: Levomepromazina	;		;	R$ 1.670,00	: LinfÃ³citos B CD20+	;		;	R$ 1.670,00	: LinfÃ³citos T CD3+	;		;	R$ 280,00	: LinfÃ³citos T auxiliar- CD4+	;	CD4	;	R$ 270,00	: LinfÃ³citos T citotÃ³xico- CD8+	;	CD8	;	R$ 270,00	: Lipase	;	LIPA	;	R$ 40,00	: Lipidograma	;	LIPID	;	R$ 100,00	: Lipo roteÃ­na- LP(a)	;	LPA	;	R$ 190,00	: LipÃ­dios totais	;	zliPTO	;	R$ 40,00	: LipÃ­dios totais	;	LIPTO	;	R$ 40,00	: Listeriose	;	LISTE	;	R$ 70,00	: LÃ­quido sinovial	;	LS	;	R$ 60,00	: LÃ­tio	;	LITIO	;	R$ 100,00	: Maconha- CanabinÃ³ides-THC	;	MACON	;	R$ 180,00	: Macroprolactina	;	MACRO	;	R$ 180,00	: MagnÃ©sio	;	MAGN	;	R$ 50,00	: MagnÃ©sio urinÃ¡rio 24 horas	;		;	R$ 60,00	: MalÃ¡ria, anticorpos IgG	;	MALAG	;	R$ 250,00	: MalÃ¡ria, anticorpos IgM	;	MALAM	;	R$ 250,00	: ManganÃªs sÃ©rico	;	MANGA	;	R$ 100,00	: Melanina	;		;	R$ 200,00	: MercÃºrio sÃ©rico	;	MERCS	;	R$ 90,00	: MercÃºrio urina de 24 horas	;		;	R$ 110,00	: MercÃºrio, urina final jorn. Trab	;	MERCU	;	R$ 90,00	: Metanefrinas fracionadas plasma	;		;	R$ 1.680,00	: Metanol,urina prÃ© jornada	;	METPRE	;	R$ 90,00	: Metil etil cetona,final jorn.trab	;	MEEC	;	R$ 130,00	: Metiletilcetona	;	METICE	;	R$ 90,00	: Micobacterias- Cultura (CT-BK)	;	CTBK	;	R$ 200,00	: MicroalbuminÃºria,24 horas	;	MIC24	;	R$ 60,00	: MicroalbuminÃºria,amostra isolada	;	MICA	;	R$ 60,00	: Mioglobina dosagem	;		;	R$ 120,00	: Mioglobina urinÃ¡ria	;	MIOU	;	R$ 70,00	: Mononucleose anticorpos heterÃ³filos 	;	MONON	;	R$ 200,00	: Epstein barr vÃ­rus, IgG	;	EBG	;	R$ 200,00	: Epstein barr vÃ­rus, IgM	;	EBM	;	R$ 200,00	: Muco nasal	;	MUCON	;	R$ 50,00	: Micobacterium tuberculosis PCR	;		;	R$ 800,00	: MocoproteÃ­nas INATIVO	;	INATIV024	;	R$ 40,00	: Mycobacterim tuberculosis- IgA	;	MICOTU	;	R$ 660,00	: Mycobacterim tuberculosis- IgM	;	MIC-M	;	R$ 330,00	: Mycoplasma pneumoniae- IgG	;	MICPG	;	R$ 180,00	: Mycoplasma pneumoniae- IgM	;	MICPM	;	R$ 180,00	: N- Acetil galactosaminidase	;		;	R$ 2.370,00	: N- metilformamida	;		;	R$ 250,00	: Nortriptilina	;	NORT	;	R$ 400,00	: NÃ­quel,urina final jorn. Trab	;	NIQ	;	R$ 180,00	: OpiÃ¡ceos- teste de triagem	;		;	R$ 160,00	: Osmolalidade sÃ©rica	;		;	R$ 180,00	: Osmolaridade urina de 24 horas	;		;	R$ 180,00	: Oxalato urinÃ¡rio (Ã¡cido oxÃ¡lico) 24 horas	;	OXALI	;	R$ 180,00	: Oxcarbazepina	;	OXCAR	;	R$ 200,00	: PCR para caxumba	;		;	R$ 2.380,00	: PH	;	PH	;	R$ 40,00	: PH fecal	;		;	R$ 50,00	: PSA (Livre)	;	PSAL	;	R$ 100,00	: PSA (Total)	;	PSAT	;	R$ 100,00	: parasitolÃ³gico de fezes 	;	PARA	;	R$ 50,00	: ParasitolÃ³gico de fezes, 1Â°amostra	;	PARA 1	;	R$ 50,00	: ParasitolÃ³gico de fezes,2Â° amostra	;	Para 2	;	R$ 50,00	: ParasitolÃ³gico de fezes,3Â° amostra	;	PARA3	;	R$ 50,00	: ParasitÃ´lÃ³gico de fezes,4Â° amostra	;	PARA4	;	R$ 50,00	: ParasitolÃ³gico de fezes,5Â° amostra	;	para 5	;	R$ 50,00	: ParasitolÃ³gico de fezes,MlF	;	MIF	;	R$ 50,00	: ParatormÃ´nio, dosagem	;	PTH 	;	R$ 100,00	: ParvovÃ­rus B19- Anticorpos IgG	;	PARVG	;	R$ 300,00	: ParvovÃ­rus B19- Anticorpos IgM	;	PARVM	;	R$ 200,00	: PeptÃ­deo C	;	PERPC	;	R$ 100,00	: PeptÃ­deo C pÃ³s prandial	;		;	R$ 100,00	: Pesquisa das mutaÃ§Ãµes C677T/ A1298C no gene MTHFR	;	MUTC677T	;	R$ 600,00	: Pesquisa de enterobius, anal swab	;	PENTER	;	R$ 60,00	: Pesquisa de antÃ­geno Covid 19	;		;	R$ 340,00	: Pesquisa de fungos	;	PFUN	;	R$ 60,00	: Pesquisa de fungos,2Ãª amostra	;	PFUN2	;	R$ 60,00	: Pesquisa de paramixovÃ­rus	;		;	R$ 2.150,00	: Pesquisa de sangue oculto (com dieta)	;	SANGOC	;	R$ 100,00	: Pesquisa de sangue oculto (sem dieta)	;		;	R$ 100,00	: Pesquisa de sangue oculto (sem dieta) 1Â° amostra	;		;	R$ 60,00	: Pesquisa de sangue oculto (sem dieta) 2Â° amostra	;		;	R$ 60,00	: Pesquisa de sangue oculto (sem dieta) 3Â° amostra	;		;	R$ 60,00	: Piruvatoquinase	;	PIRUVA	;	R$ 690,00	: Plasmodium, pesquisa	;	PLASD	;	R$ 60,00	: Porfirinas, quantitativo em urina de 24 horas	;	PORF24	;	R$ 1.340,00	: PorfobilinogÃªnio, urina	;	PORFO	;	R$ 70,00	: PotÃ¡ssio	;	POTA	;	R$ 50,00	: PotÃ¡ssio urinÃ¡rio	;	POTAU	;	R$ 50,00	: Pregnenolona	;		;	R$ 690,00	: Primidona	;	PRIMI	;	R$ 240,00	: Progesterona	;	PROGE	;	R$ 90,00	: Prograf, dosagem de Tacrolimus	;	PROGRAF	;	R$ 1.180,00	: Prolactina	;	PROLA	;	R$ 100,00	: Prolactina apÃ³s TRH	;		;	R$ 500,00	: Prolactina apÃ³s diluiÃ§Ã£o	;		;	R$ 90,00	: Prolactina curva	;		;	R$ 260,00	: prostaglandina E2	;		;	R$ 2.510,00	: proteÃ­na C funcional	;	PTCF	;	R$ 220,00	: proteÃ­na C reativa, quantitativo	;	PCR	;	R$ 40,00	: ProteÃ­na isolada na urina 	;		;	R$ 90,00	: Pcr cmv 	;	PCR CMV	;	R$ 830,00	: ProteÃ­na C reativa, ultra sensÃ­vel	;	PCRUS	;	R$ 180,00	: ProteÃ­na P ribossomal, anticorpos IgG	;		;	R$ 910,00	: ProteÃ­na S funcional	;	PTSF	;	R$ 640,00	: ProteÃ­na de Bence Jones 24 horas	;		;	R$ 70,00	: ProteÃ­na de Bence Jones, urina jato mÃ©dio	;	BENCE	;	R$ 70,00	: ProteÃ­na urinÃ¡ria, 12 ou 24 horas	;	PROTU	;	R$ 70,00	: ProteÃ­nas totais e fraÃ§Ãµes	;	PROTF	;	R$ 70,00	: Protoporfirina livre	;		;	R$ 200,00	: Protrombina, detecÃ§Ã£o da mutaÃ§Ã£o do gene	;	PROPCR	;	R$ 920,00	: Provas de funÃ§Ã£o hepÃ¡tica	;	PFH	;	R$ 260,00	: Provas de funÃ§Ã£o reumÃ¡tica	;	PFR	;	R$ 210,00	: RAIVA- Sorologia	;	RAIVA	;	R$ 460,00	: ReaÃ§Ã£o de Waaler Rose	;	WAAL	;	R$ 50,00	: ReaÃ§Ã£o de Widal	;	WIDAL	;	R$ 50,00	: Receptor solÃºvel de transferrina	;		;	R$ 700,00	: Renina	;	RENIN	;	R$ 270,00	: ReticulÃ³citos	;	RETIC	;	R$ 40,00	: RetraÃ§Ã£o do coÃ¡gulo	;	RETRA	;	R$ 50,00	: Risco Fetal- AvaliaÃ§Ã£o	;	RISCO	;	R$ 900,00	: Respiridona	;		;	R$ 1.100,00	: RotavÃ­rus	;	ROTAV	;	R$ 900,00	: Rotina de urina	;	URINA	;	R$ 50,00	: Rotina de lÃ­quido sinovial	;		;	R$ 90,00	: Rotina do LÃ­quor	;	LCR	;	R$ 170,00	: RubÃ©ola, IgG	;	RUBG	;	R$ 100,00	: RubÃ©ola, IgG Avidez	;	RUBGA	;	R$ 290,00	: RubÃ©ola, IgM	;	RUBM	;	R$ 100,00	: Sallmonela typhi IgG	;		;	R$ 340,00	: Sallmonela typhi IgM	;		;	R$ 210,00	: Sarampo-lgG	;	SARAG	;	R$ 210,00	: Sarampo- IgM	;	SARAM	;	R$ 190,00	: SelÃªnio sÃ©rico	;	SEL	;	R$ 120,00	: Serotonina	;	SEROT	;	R$ 120,00	: Somatomedina C- IGF 1	;	SOMA	;	R$ 190,00	: Sorologia para Covid 19 IgM e IgG (Ã�lvaro)	;		;	R$ 390,00	: Sorologia para Covid 19 anticorpos IgG e IgM	;		;	R$ 270,00	: Sorologia para Covid 19 anticorpos totais	;		;	R$ 680,00	: Soro amiloide A	;		;	R$ 690,00	: Subclasses de IgG- Humana	;	SBCLA	;	R$ 490,00	: SubstÃ¢ncias redutoras nas fezes	;	SUBRE	;	R$ 40,00	: SÃ­filis- FTA- ABS- IgG	;	FTA	;	R$ 140,00	: SÃ­filis- FTA- ABS- IgM	;	FTAM	;	R$ 140,00	: sÃ­filis- VDRL	;	VDRL	;	R$ 50,00	: SÃ³dio	;	SODIO	;	R$ 50,00	: SÃ³dio urinÃ¡rio	;	SODIA	;	R$ 50,00	: SCL 70	;	SCL	;	R$ 130,00	: T3 realizado no apoio)	;	T3A	;	R$ 90,00	: T3 ( triodotiroina reverso)	;		;	R$ 170,00	: T3 Livre, tironina livre	;	T3L	;	R$ 90,00	: T4 (realizado no apoio)	;	T4A	;	R$ 90,00	: T4(tetraiodotironina)	;		;	R$ 90,00	: T4 Livre (realizado no apoio)	;	T4LA	;	R$ 90,00	: TSH, (realizado no apoio)	;	TSHA	;	R$ 90,00	: Tsh- Ultra sensÃ­vel 	;		;	R$ 90,00	: Tempo de atividade da protrombina- TAP	;	TAP	;	R$ 70,00	: Tempo de coagulaÃ§Ã£o	;	TC	;	R$ 30,00	: Tempo de sangramento de lvy	;	TS	;	R$ 40,00	: Tempo de trombina	;	TROMB	;	R$ 160,00	: Tempo de tromboplastina parcial	;	PTT	;	R$ 50,00	: Teofilina	;	TEOF	;	R$ 190,00	: Teste de absorÃ§Ã£o da sacarose	;	TOSAC	;	R$ 80,00	: Teste de estÃ­mulo do GH com clonidina	;	TEGHCLONI	;	R$ 220,00	: Teste de estÃ­mulo do TSH apÃ³s TRH	;		;	R$ 340,00	: Teste de falcizaÃ§Ã£o	;	FAZ	;	R$ 40,00	: Teste de tolerÃ¢ncia a lactose	;	TOLCC	;	R$ 100,00	: Teste do pezinho ampliado 7 parÃ¢metros	;		;	R$ 200,00	: Teste do pezinho bÃ¡sico 4 parÃ¢metros	;		;	R$ 200,00	: Teste do pezinho master 15 parÃ¢metros	;		;	R$ 450,00	: Teste do pezinho plus 10 parÃ¢metros	;		;	R$ 240,00	: Teste imunolÃ³gico de gravidez	;		;	R$ 70,00	: Teste de TolerÃ¢ncia Oral a Glicose	;		;	R$ 90,00	: Teste imunolÃ³gico de gravidez	;	TIG	;	R$ 90,00	: Testosterona biodisponÃ­vel	;	TESTOBIO	;	R$ 170,00	: Testosterona livre	;	TESTL	;	R$ 170,00	: Testosterona livre em saliva	;		;	R$ 340,00	: Testosterona total	;	TESTT	;	R$ 160,00	: Tireoglobulina- TG	;	TIREO	;	R$ 170,00	: ToxicolÃ³gico de larga janela- RenovaÃ§Ãµes	;	TOXIRE	;	R$ 640,00	: ToxicolÃ³gico de cabelo- RenovaÃ§Ãµes e concursos	;	TOXCA	;	R$ 640,00	: Toxocara anticorpos IgG	;		;	R$ 190,00	: Toxoplasmose Avidez, Anticorpos IgG	;	AVIDET	;	R$ 160,00	: Toxoplasmose, IgA	;	TOXO	;	R$ 230,00	: Toxoplasmose, IgG	;	TOXOG	;	R$ 110,00	: Toxoplasmose, IgM	;	TOXOM	;	R$ 110,00	: Transaminase oxalacÃ©tica, TGO	;	TGO	;	R$ 50,00	: Transaminase pirÃºvica, TGP	;	TGP	;	R$ 50,00	: Transferrina	;	TRAN	;	R$ 80,00	: Treponema (campo escuro)	;	TREP	;	R$ 70,00	: Triclorocompostos totais (TCE/ TCA) final de jornada	;	TRC	;	R$ 90,00	: TriglicerÃ­deos 	;	TRIG	;	R$ 40,00	: Triptofano	;		;	R$ 460,00	: Troponina	;	TROPO	;	R$ 150,00	: Trab	;	TRAP	;	R$ 150,00	: TÃ©tano anticorpos IgG	;		;	R$ 230,00	: UrÃ©ia	;	UREIA	;	R$ 50,00	: UrÃ©ia urinÃ¡ria,24 horas	;	UREIU	;	R$ 40,00	: VÃ­rua coriomeningites linfocitÃ¡rias	;		;	R$ 4.210,00	: Vitamina A	;	VITAA	;	R$ 190,00	: Vitamina B1, tiamina	;	VITAB1	;	R$ 230,00	: Vitamina B12	;	VIB12	;	R$ 120,00	: Vitamina B2, riboflavina	;		;	R$ 440,00	: Vitamina B6, pirodoxal 5 fosfato	;	VITAB6	;	R$ 300,00	: Vitamina C, Ã¡cido ascÃ³rbico	;	VITAC	;	R$ 160,00	: Vitamina D- 1,25 dihidroxi	;	VITAD	;	R$ 190,00	: Vitamina D- 25 hidroxi	;	VIT25	;	R$ 190,00	: Vitamina D com diluiÃ§Ã£o	;		;	R$ 250,00	: Vitamina E, tocoferol 	;	VITE	;	R$ 220,00	: Vitamina K	;		;	R$ 250,00	: X- FrÃ¡gil, pesquisa por PCR	;	XFRA	;	R$ 1.050,00	: Zika vÃ­rus anticorpos IgG	;		;	R$ 690,00	: Zika vÃ­rus anticorpos IgM	;		;	R$ 690,00	: Zinco protoporfirina	;		;	R$ 260,00	: Zinco sÃ©rico	;	ZN	;	R$ 150,00	: Zinco, urina prÃ© jornada	;	ZINCO	;	R$ 100,00	: P- aminofenol	;		;	R$ 640,00	: Ã�cido 2- Tio- Tiazolidina 4- carboxilico	;		;	R$ 640,00	: Ã�cido cÃ­trico ( citrato)	;		;	R$ 430,00	: Ã�cido hipÃºrico, final jorn. Trabalho	;	HIPUR	;	R$ 60,00	: Ã�cido homogentÃ­sico	;	HOMOG	;	R$ 40,00	: Ã�cido lÃ¡tico (lactato)	;	ACLAT	;	R$ 70,00	: Ã�cido lÃ¡tico, curva	;	ACLATCURV	;	R$ 190,00	: Ã�cido mandÃ©lico	;	MANDE	;	R$ 1.100,00	: Ã�cidos graxos de cadeia muito longa 	;	 	;	R$ 2.730,00	:`;
+
+    function carregarProdutosIniciais() {
+      const linhas = conteudoTxt.trim().split(':').filter(linha => linha.trim() !== '');
+      const produtos = linhas.map(linha => {
+        const [nome, mnem, preco] = linha.split(';');
+        return {
+          nome: nome.trim(),
+          mnem: mnem.trim(),
+          preco: preco.trim()
+        };
+      });
+      salvarProdutos(produtos);
+    }
+
+    function obterProdutos() {
+      const produtos = localStorage.getItem('produtos');
+      return produtos ? JSON.parse(produtos) : [];
+    }
+
+    function salvarProdutos(produtos) {
+      localStorage.setItem('produtos', JSON.stringify(produtos));
+    }
+
+    function buscarProdutos() {
+      const termo = normalizarTexto(document.getElementById('busca').value.trim());
+      const produtos = obterProdutos();
+
+      const resultados = produtos.filter(produto => {
+        const nome = normalizarTexto(produto.nome);
+        const mnem = normalizarTexto(produto.mnem);
+        const preco = produto.preco.toLowerCase();
+
+        return (
+          nome.includes(termo) ||
+          mnem.includes(termo) ||
+          preco.includes(termo) ||
+          calcularSimilaridade(nome, termo) > 0.7
+        );
+      });
+
+      exibirResultados(resultados);
+    }
+
+    function exibirResultados(produtos) {
+      const resultadosTabela = document.getElementById('resultados').querySelector('tbody');
+      resultadosTabela.innerHTML = '';
+
+      if (produtos.length === 0) {
+        resultadosTabela.innerHTML = '<tr><td colspan="3">Nenhum exame encontrado.</td></tr>';
+        return;
+      }
+
+      produtos.forEach(produto => {
+        const linha = document.createElement('tr');
+        linha.innerHTML = `
+          <td>${produto.nome}</td>
+          <td>${produto.mnem}</td>
+          <td>${produto.preco}</td>
+        `;
+        resultadosTabela.appendChild(linha);
+      });
+    }
+
+    function normalizarTexto(texto) {
+      return texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    }
+
+    function calcularSimilaridade(a, b) {
+      const distancia = calcularDistanciaLevenshtein(a, b);
+      const comprimentoMax = Math.max(a.length, b.length);
+      return comprimentoMax === 0 ? 1.0 : (1.0 - distancia / comprimentoMax);
+    }
+
+    function calcularDistanciaLevenshtein(a, b) {
+      const matriz = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
+      for (let i = 0; i <= a.length; i++) matriz[i][0] = i;
+      for (let j = 0; j <= b.length; j++) matriz[0][j] = j;
+
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          const custoSubstituicao = a[i - 1] === b[j - 1] ? 0 : 1;
+          matriz[i][j] = Math.min(
+            matriz[i - 1][j] + 1,
+            matriz[i][j - 1] + 1,
+            matriz[i - 1][j - 1] + custoSubstituicao
+          );
+        }
+      }
+      return matriz[a.length][b.length];
+    }
+
+    window.onload = carregarProdutosIniciais;
+  </script>
+</body>
+</html>
