@@ -1,154 +1,198 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Busca de Exames</title>
   <style>
-    /* Estilos gerais */
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #f3f4f6;
       margin: 0;
       padding: 0;
+      background-color: #f9fafb;
       color: #333;
     }
 
     header {
-      background-color: #0066cc;
+      background-color: #0073e6;
       color: white;
-      padding: 20px;
       text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      text-transform: uppercase;
+      padding: 1.5rem 0;
+      font-size: 1.8rem;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
 
     main {
+      padding: 2rem;
       max-width: 900px;
-      margin: 40px auto;
-      background: white;
-      padding: 20px 30px;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-      margin-top: 0;
-      color: #0066cc;
-      font-size: 1.5rem;
-      border-bottom: 2px solid #0066cc;
-      padding-bottom: 5px;
-    }
-
-    label {
-      font-size: 1rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-      display: block;
-      color: #444;
+      margin: 0 auto;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 12px 16px;
+      padding: 0.8rem;
+      margin-bottom: 1.5rem;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 8px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
       font-size: 1rem;
-      transition: all 0.3s ease-in-out;
     }
 
-    input[type="text"]:focus {
-      border-color: #0066cc;
-      box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
-      outline: none;
-    }
-
-    .tabela-resultados {
+    table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .tabela-resultados th {
-      background-color: #0066cc;
-      color: white;
+    th,
+    td {
+      padding: 1rem;
       text-align: left;
-      padding: 12px 8px;
-      font-size: 1rem;
-    }
-
-    .tabela-resultados td {
-      padding: 12px 8px;
       border-bottom: 1px solid #ddd;
-      font-size: 0.95rem;
     }
 
-    .tabela-resultados tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    .tabela-resultados tr:hover {
-      background-color: #f1f1f1;
-    }
-
-    .tabela-resultados td:first-child {
+    th {
+      background-color: #005bb5;
+      color: white;
       font-weight: bold;
-      color: #333;
+      font-size: 1.1rem;
+    }
+
+    tr:hover {
+      background-color: #eef6ff;
+    }
+
+    .caixa-total {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      background-color: #ffffff;
+      border: 2px solid #0073e6;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      width: 350px;
+    }
+
+    .caixa-total h3 {
+      margin: 0 0 1rem;
+      font-size: 1.3rem;
+      text-align: center;
+      color: #0073e6;
+      border-bottom: 2px solid #0073e6;
+      padding-bottom: 0.5rem;
+    }
+
+    .caixa-total ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .caixa-total ul li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .caixa-total ul li button {
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .caixa-total ul li button:hover {
+      background-color: #b71c1c;
+    }
+
+    .caixa-total .total-e-limpar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .caixa-total .total-e-limpar button {
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .caixa-total .total-e-limpar button:hover {
+      background-color: #b71c1c;
     }
 
     footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #005bb5;
+      color: white;
       text-align: center;
-      padding: 10px;
-      margin-top: 30px;
-      color: #777;
+      padding: 0.8rem 0;
       font-size: 0.9rem;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
     }
 
     footer a {
-      color: #0066cc;
-      text-decoration: none;
-    }
-
-    footer a:hover {
+      color: white;
       text-decoration: underline;
     }
   </style>
 </head>
+
 <body>
   <header>
-    <h1>Busca de Exames</h1>
+    Busca de Exames
   </header>
   <main>
-    <section>
-      <h2>Buscar Exame</h2>
-      <label for="busca">Digite o nome ou mnemônico do exame:</label>
-      <input type="text" id="busca" placeholder="Exemplo: Ácido, A1A, 70" oninput="buscarProdutos()">
-    </section>
-
-    <section class="resultados">
-      <table class="tabela-resultados" id="resultados">
-        <thead>
-          <tr>
-            <th>Nome do Exame</th>
-            <th>Mnemônico</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="3">Os exames aparecerão aqui.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <input type="text" id="busca" placeholder="Digite o nome ou mnemônico do exame" oninput="buscarExames()">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome do Exame</th>
+          <th>Mnemônico</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody id="resultados">
+        <tr>
+          <td colspan="3">Nenhum exame encontrado</td>
+        </tr>
+      </tbody>
+    </table>
   </main>
+
+  <div class="caixa-total">
+    <h3>Exames Selecionados</h3>
+    <ul id="lista-selecionados"></ul>
+    <div class="total-e-limpar">
+      <p id="texto-total">Total: R$ 0,00</p>
+      <button onclick="limparSelecionados()">Limpar Tudo</button>
+    </div>
+  </div>
+
   <footer>
-    <p>Desenvolvido por <a href="#">©️Elijunio & IA</a> - INSTITUTO DR. GERLAN GURGEL </p>
+    Desenvolvido por <a href="#">©️Elijunio & IA</a> - INSTITUTO DR. GERLAN GURGEL.
   </footer>
 
   <script>
@@ -604,340 +648,84 @@ Insulina pós prandial	;	INSUP	;	R$ 70,00	:
 Insulina 2 horas após dextrose	;		;	R$ 220,00	:
 Intolerância a lactose, Teste genético	;	LACTA	;	R$ 480,00	:
 lodo protéico	;		;	R$ 240,00	:
-lodo 24 horas	;		;	R$ 540,00	:
-JC Vírus, BK vírus, detecção por PCR	;		;	R$ 950,00	:
-QAPPA cadeia leve	;		;	R$ 140,00	:
-QAPPA e Lambda, cadeia leve livre	;		;	R$ 1.040,00	:
-	;		;		:
-LH (realizado no apoio)	;	LHA	;	R$ 80,00	:
-Lambda cadeia leve	;		;	R$ 140,00	:
-Lamotrigina	;	LAMT	;	R$ 470,00	:
-Leishmaniose-lgG	;	LEIS	;	R$ 70,00	:
-Leishmaniose-lgM	;	LEISM	;	R$ 70,00	:
-Leptina	;	LEPT	;	R$ 190,00	:
-Leptospirose	;	LEPTA	;	R$ 210,00	:
-Leptospirose, Anticorpos IgG	;	LEPTG	;	R$ 130,00	:
-Leptospirose, Anticorpos IgM	;	LEPTM	;	R$ 100,00	:
-Leucograma	;	LEUCO	;	R$ 90,00	:
-Leucócitos fecais,pesquisa	;	LEUCOF	;	R$ 40,00	:
-Leveduras	;	LEVED	;	R$ 40,00	:
-Levomepromazina	;		;	R$ 1.670,00	:
-Linfócitos B CD20+	;		;	R$ 1.670,00	:
-Linfócitos T CD3+	;		;	R$ 280,00	:
-Linfócitos T auxiliar- CD4+	;	CD4	;	R$ 270,00	:
-Linfócitos T citotóxico- CD8+	;	CD8	;	R$ 270,00	:
-Lipase	;	LIPA	;	R$ 40,00	:
-Lipidograma	;	LIPID	;	R$ 100,00	:
-Lipo roteína- LP(a)	;	LPA	;	R$ 190,00	:
-Lipídios totais	;	zliPTO	;	R$ 40,00	:
-Lipídios totais	;	LIPTO	;	R$ 40,00	:
-Listeriose	;	LISTE	;	R$ 70,00	:
-Líquido sinovial	;	LS	;	R$ 60,00	:
-Lítio	;	LITIO	;	R$ 100,00	:
-Maconha- Canabinóides-THC	;	MACON	;	R$ 180,00	:
-Macroprolactina	;	MACRO	;	R$ 180,00	:
-Magnésio	;	MAGN	;	R$ 50,00	:
-Magnésio urinário 24 horas	;		;	R$ 60,00	:
-Malária, anticorpos IgG	;	MALAG	;	R$ 250,00	:
-Malária, anticorpos IgM	;	MALAM	;	R$ 250,00	:
-Manganês sérico	;	MANGA	;	R$ 100,00	:
-Melanina	;		;	R$ 200,00	:
-Mercúrio sérico	;	MERCS	;	R$ 90,00	:
-Mercúrio urina de 24 horas	;		;	R$ 110,00	:
-Mercúrio, urina final jorn. Trab	;	MERCU	;	R$ 90,00	:
-Metanefrinas fracionadas plasma	;		;	R$ 1.680,00	:
-Metanol,urina pré jornada	;	METPRE	;	R$ 90,00	:
-Metil etil cetona,final jorn.trab	;	MEEC	;	R$ 130,00	:
-Metiletilcetona	;	METICE	;	R$ 90,00	:
-Micobacterias- Cultura (CT-BK)	;	CTBK	;	R$ 200,00	:
-Microalbuminúria,24 horas	;	MIC24	;	R$ 60,00	:
-Microalbuminúria,amostra isolada	;	MICA	;	R$ 60,00	:
-Mioglobina dosagem	;		;	R$ 120,00	:
-Mioglobina urinária	;	MIOU	;	R$ 70,00	:
-Mononucleose anticorpos heterófilos 	;	MONON	;	R$ 200,00	:
-Epstein barr vírus, IgG	;	EBG	;	R$ 200,00	:
-Epstein barr vírus, IgM	;	EBM	;	R$ 200,00	:
-Muco nasal	;	MUCON	;	R$ 50,00	:
-Micobacterium tuberculosis PCR	;		;	R$ 800,00	:
-Mocoproteínas INATIVO	;	INATIV024	;	R$ 40,00	:
-Mycobacterim tuberculosis- IgA	;	MICOTU	;	R$ 660,00	:
-Mycobacterim tuberculosis- IgM	;	MIC-M	;	R$ 330,00	:
-Mycoplasma pneumoniae- IgG	;	MICPG	;	R$ 180,00	:
-Mycoplasma pneumoniae- IgM	;	MICPM	;	R$ 180,00	:
-N- Acetil galactosaminidase	;		;	R$ 2.370,00	:
-N- metilformamida	;		;	R$ 250,00	:
-Nortriptilina	;	NORT	;	R$ 400,00	:
-Níquel,urina final jorn. Trab	;	NIQ	;	R$ 180,00	:
-Opiáceos- teste de triagem	;		;	R$ 160,00	:
-Osmolalidade sérica	;		;	R$ 180,00	:
-Osmolaridade urina de 24 horas	;		;	R$ 180,00	:
-Oxalato urinário (ácido oxálico) 24 horas	;	OXALI	;	R$ 180,00	:
-Oxcarbazepina	;	OXCAR	;	R$ 200,00	:
-PCR para caxumba	;		;	R$ 2.380,00	:
-PH	;	PH	;	R$ 40,00	:
-PH fecal	;		;	R$ 50,00	:
-PSA (Livre)	;	PSAL	;	R$ 100,00	:
-PSA (Total)	;	PSAT	;	R$ 100,00	:
-parasitológico de fezes 	;	PARA	;	R$ 50,00	:
-Parasitológico de fezes, 1°amostra	;	PARA 1	;	R$ 50,00	:
-Parasitológico de fezes,2° amostra	;	Para 2	;	R$ 50,00	:
-Parasitológico de fezes,3° amostra	;	PARA3	;	R$ 50,00	:
-Parasitôlógico de fezes,4° amostra	;	PARA4	;	R$ 50,00	:
-Parasitológico de fezes,5° amostra	;	para 5	;	R$ 50,00	:
-Parasitológico de fezes,MlF	;	MIF	;	R$ 50,00	:
-Paratormônio, dosagem	;	PTH 	;	R$ 100,00	:
-Parvovírus B19- Anticorpos IgG	;	PARVG	;	R$ 300,00	:
-Parvovírus B19- Anticorpos IgM	;	PARVM	;	R$ 200,00	:
-Peptídeo C	;	PERPC	;	R$ 100,00	:
-Peptídeo C pós prandial	;		;	R$ 100,00	:
-Pesquisa das mutações C677T/ A1298C no gene MTHFR	;	MUTC677T	;	R$ 600,00	:
-Pesquisa de enterobius, anal swab	;	PENTER	;	R$ 60,00	:
-Pesquisa de antígeno Covid 19	;		;	R$ 340,00	:
-Pesquisa de fungos	;	PFUN	;	R$ 60,00	:
-Pesquisa de fungos,2ê amostra	;	PFUN2	;	R$ 60,00	:
-Pesquisa de paramixovírus	;		;	R$ 2.150,00	:
-Pesquisa de sangue oculto (com dieta)	;	SANGOC	;	R$ 100,00	:
-Pesquisa de sangue oculto (sem dieta)	;		;	R$ 100,00	:
-Pesquisa de sangue oculto (sem dieta) 1° amostra	;		;	R$ 60,00	:
-Pesquisa de sangue oculto (sem dieta) 2° amostra	;		;	R$ 60,00	:
-Pesquisa de sangue oculto (sem dieta) 3° amostra	;		;	R$ 60,00	:
-Piruvatoquinase	;	PIRUVA	;	R$ 690,00	:
-Plasmodium, pesquisa	;	PLASD	;	R$ 60,00	:
-Porfirinas, quantitativo em urina de 24 horas	;	PORF24	;	R$ 1.340,00	:
-Porfobilinogênio, urina	;	PORFO	;	R$ 70,00	:
-Potássio	;	POTA	;	R$ 50,00	:
-Potássio urinário	;	POTAU	;	R$ 50,00	:
-Pregnenolona	;		;	R$ 690,00	:
-Primidona	;	PRIMI	;	R$ 240,00	:
-Progesterona	;	PROGE	;	R$ 90,00	:
-Prograf, dosagem de Tacrolimus	;	PROGRAF	;	R$ 1.180,00	:
-Prolactina	;	PROLA	;	R$ 100,00	:
-Prolactina após TRH	;		;	R$ 500,00	:
-Prolactina após diluição	;		;	R$ 90,00	:
-Prolactina curva	;		;	R$ 260,00	:
-prostaglandina E2	;		;	R$ 2.510,00	:
-proteína C funcional	;	PTCF	;	R$ 220,00	:
-proteína C reativa, quantitativo	;	PCR	;	R$ 40,00	:
-Proteína isolada na urina 	;		;	R$ 90,00	:
-Pcr cmv 	;	PCR CMV	;	R$ 830,00	:
-Proteína C reativa, ultra sensível	;	PCRUS	;	R$ 180,00	:
-Proteína P ribossomal, anticorpos IgG	;		;	R$ 910,00	:
-Proteína S funcional	;	PTSF	;	R$ 640,00	:
-Proteína de Bence Jones 24 horas	;		;	R$ 70,00	:
-Proteína de Bence Jones, urina jato médio	;	BENCE	;	R$ 70,00	:
-Proteína urinária, 12 ou 24 horas	;	PROTU	;	R$ 70,00	:
-Proteínas totais e frações	;	PROTF	;	R$ 70,00	:
-Protoporfirina livre	;		;	R$ 200,00	:
-Protrombina, detecção da mutação do gene	;	PROPCR	;	R$ 920,00	:
-Provas de função hepática	;	PFH	;	R$ 260,00	:
-Provas de função reumática	;	PFR	;	R$ 210,00	:
-RAIVA- Sorologia	;	RAIVA	;	R$ 460,00	:
-Reação de Waaler Rose	;	WAAL	;	R$ 50,00	:
-Reação de Widal	;	WIDAL	;	R$ 50,00	:
-Receptor solúvel de transferrina	;		;	R$ 700,00	:
-Renina	;	RENIN	;	R$ 270,00	:
-Reticulócitos	;	RETIC	;	R$ 40,00	:
-Retração do coágulo	;	RETRA	;	R$ 50,00	:
-Risco Fetal- Avaliação	;	RISCO	;	R$ 900,00	:
-Respiridona	;		;	R$ 1.100,00	:
-Rotavírus	;	ROTAV	;	R$ 900,00	:
-Rotina de urina	;	URINA	;	R$ 50,00	:
-Rotina de líquido sinovial	;		;	R$ 90,00	:
-Rotina do Líquor	;	LCR	;	R$ 170,00	:
-Rubéola, IgG	;	RUBG	;	R$ 100,00	:
-Rubéola, IgG Avidez	;	RUBGA	;	R$ 290,00	:
-Rubéola, IgM	;	RUBM	;	R$ 100,00	:
-Sallmonela typhi IgG	;		;	R$ 340,00	:
-Sallmonela typhi IgM	;		;	R$ 210,00	:
-Sarampo-lgG	;	SARAG	;	R$ 210,00	:
-Sarampo- IgM	;	SARAM	;	R$ 190,00	:
-Selênio sérico	;	SEL	;	R$ 120,00	:
-Serotonina	;	SEROT	;	R$ 120,00	:
-Somatomedina C- IGF 1	;	SOMA	;	R$ 190,00	:
-Sorologia para Covid 19 IgM e IgG (Álvaro)	;		;	R$ 390,00	:
-Sorologia para Covid 19 anticorpos IgG e IgM	;		;	R$ 270,00	:
-Sorologia para Covid 19 anticorpos totais	;		;	R$ 680,00	:
-Soro amiloide A	;		;	R$ 690,00	:
-Subclasses de IgG- Humana	;	SBCLA	;	R$ 490,00	:
-Substâncias redutoras nas fezes	;	SUBRE	;	R$ 40,00	:
-Sífilis- FTA- ABS- IgG	;	FTA	;	R$ 140,00	:
-Sífilis- FTA- ABS- IgM	;	FTAM	;	R$ 140,00	:
-sífilis- VDRL	;	VDRL	;	R$ 50,00	:
-Sódio	;	SODIO	;	R$ 50,00	:
-Sódio urinário	;	SODIA	;	R$ 50,00	:
-SCL 70	;	SCL	;	R$ 130,00	:
-T3 realizado no apoio)	;	T3A	;	R$ 90,00	:
-T3 ( triodotiroina reverso)	;		;	R$ 170,00	:
-T3 Livre, tironina livre	;	T3L	;	R$ 90,00	:
-T4 (realizado no apoio)	;	T4A	;	R$ 90,00	:
-T4(tetraiodotironina)	;		;	R$ 90,00	:
-T4 Livre (realizado no apoio)	;	T4LA	;	R$ 90,00	:
-TSH, (realizado no apoio)	;	TSHA	;	R$ 90,00	:
-Tsh- Ultra sensível 	;		;	R$ 90,00	:
-Tempo de atividade da protrombina- TAP	;	TAP	;	R$ 70,00	:
-Tempo de coagulação	;	TC	;	R$ 30,00	:
-Tempo de sangramento de lvy	;	TS	;	R$ 40,00	:
-Tempo de trombina	;	TROMB	;	R$ 160,00	:
-Tempo de tromboplastina parcial	;	PTT	;	R$ 50,00	:
-Teofilina	;	TEOF	;	R$ 190,00	:
-Teste de absorção da sacarose	;	TOSAC	;	R$ 80,00	:
-Teste de estímulo do GH com clonidina	;	TEGHCLONI	;	R$ 220,00	:
-Teste de estímulo do TSH após TRH	;		;	R$ 340,00	:
-Teste de falcização	;	FAZ	;	R$ 40,00	:
-Teste de tolerância a lactose	;	TOLCC	;	R$ 100,00	:
-Teste do pezinho ampliado 7 parâmetros	;		;	R$ 200,00	:
-Teste do pezinho básico 4 parâmetros	;		;	R$ 200,00	:
-Teste do pezinho master 15 parâmetros	;		;	R$ 450,00	:
-Teste do pezinho plus 10 parâmetros	;		;	R$ 240,00	:
-Teste imunológico de gravidez	;		;	R$ 70,00	:
-Teste de Tolerância Oral a Glicose	;		;	R$ 90,00	:
-Teste imunológico de gravidez	;	TIG	;	R$ 90,00	:
-Testosterona biodisponível	;	TESTOBIO	;	R$ 170,00	:
-Testosterona livre	;	TESTL	;	R$ 170,00	:
-Testosterona livre em saliva	;		;	R$ 340,00	:
-Testosterona total	;	TESTT	;	R$ 160,00	:
-Tireoglobulina- TG	;	TIREO	;	R$ 170,00	:
-Toxicológico de larga janela- Renovações	;	TOXIRE	;	R$ 640,00	:
-Toxicológico de cabelo- Renovações e concursos	;	TOXCA	;	R$ 640,00	:
-Toxocara anticorpos IgG	;		;	R$ 190,00	:
-Toxoplasmose Avidez, Anticorpos IgG	;	AVIDET	;	R$ 160,00	:
-Toxoplasmose, IgA	;	TOXO	;	R$ 230,00	:
-Toxoplasmose, IgG	;	TOXOG	;	R$ 110,00	:
-Toxoplasmose, IgM	;	TOXOM	;	R$ 110,00	:
-Transaminase oxalacética, TGO	;	TGO	;	R$ 50,00	:
-Transaminase pirúvica, TGP	;	TGP	;	R$ 50,00	:
-Transferrina	;	TRAN	;	R$ 80,00	:
-Treponema (campo escuro)	;	TREP	;	R$ 70,00	:
-Triclorocompostos totais (TCE/ TCA) final de jornada	;	TRC	;	R$ 90,00	:
-Triglicerídeos 	;	TRIG	;	R$ 40,00	:
-Triptofano	;		;	R$ 460,00	:
-Troponina	;	TROPO	;	R$ 150,00	:
-Trab	;	TRAP	;	R$ 150,00	:
-Tétano anticorpos IgG	;		;	R$ 230,00	:
-Uréia	;	UREIA	;	R$ 50,00	:
-Uréia urinária,24 horas	;	UREIU	;	R$ 40,00	:
-Vírua coriomeningites linfocitárias	;		;	R$ 4.210,00	:
-Vitamina A	;	VITAA	;	R$ 190,00	:
-Vitamina B1, tiamina	;	VITAB1	;	R$ 230,00	:
-Vitamina B12	;	VIB12	;	R$ 120,00	:
-Vitamina B2, riboflavina	;		;	R$ 440,00	:
-Vitamina B6, pirodoxal 5 fosfato	;	VITAB6	;	R$ 300,00	:
-Vitamina C, ácido ascórbico	;	VITAC	;	R$ 160,00	:
-Vitamina D- 1,25 dihidroxi	;	VITAD	;	R$ 190,00	:
-Vitamina D- 25 hidroxi	;	VIT25	;	R$ 190,00	:
-Vitamina D com diluição	;		;	R$ 250,00	:
-Vitamina E, tocoferol 	;	VITE	;	R$ 220,00	:
-Vitamina K	;		;	R$ 250,00	:
-X- Frágil, pesquisa por PCR	;	XFRA	;	R$ 1.050,00	:
-Zika vírus anticorpos IgG	;		;	R$ 690,00	:
-Zika vírus anticorpos IgM	;		;	R$ 690,00	:
-Zinco protoporfirina	;		;	R$ 260,00	:
-Zinco sérico	;	ZN	;	R$ 150,00	:
-Zinco, urina pré jornada	;	ZINCO	;	R$ 100,00	:
-P- aminofenol	;		;	R$ 640,00	:
-Ácido 2- Tio- Tiazolidina 4- carboxilico	;		;	R$ 640,00	:
-Ácido cítrico ( citrato)	;		;	R$ 430,00	:
-Ácido hipúrico, final jorn. Trabalho	;	HIPUR	;	R$ 60,00	:
-Ácido homogentísico	;	HOMOG	;	R$ 40,00	:
-Ácido lático (lactato)	;	ACLAT	;	R$ 70,00	:
-Ácido lático, curva	;	ACLATCURV	;	R$ 190,00	:
-Ácido mandélico	;	MANDE	;	R$ 1.100,00	:
-Ácidos graxos de cadeia muito longa 	;	        	;	R$ 2.730,00	:
-`;
-    function carregarProdutosIniciais() {
-      const linhas = conteudoTxt.trim().split(':').filter(linha => linha.trim() !== '');
-      const produtos = linhas.map(linha => {
-        const [nome, mnem, preco] = linha.split(';');
-        return {
-          nome: nome.trim(),
-          mnem: mnem.trim(),
-          preco: preco.trim()
-        };
-      });
-      salvarProdutos(produtos);
-    }
+lodo 24 `;
 
-    function obterProdutos() {
-      const produtos = localStorage.getItem('produtos');
-      return produtos ? JSON.parse(produtos) : [];
-    }
+    const exames = conteudoTxt.split(":").map(item => {
+      const partes = item.split(';').map(parte => parte.trim());
+      return {
+        nome: partes[0] || '',
+        mnem: partes[1] || '',
+        valor: parseFloat((partes[2] || '0').replace('R$', '').replace('.', '').replace(',', '.').trim()) || 0
+      };
+    }).filter(exame => exame.nome);
 
-    function salvarProdutos(produtos) {
-      localStorage.setItem('produtos', JSON.stringify(produtos));
-    }
+    let total = 0;
+    const selecionados = [];
 
-    function buscarProdutos() {
-      const termo = normalizarTexto(document.getElementById('busca').value.trim());
-      const produtos = obterProdutos();
-
-      const resultados = produtos.filter(produto => {
-        const nome = normalizarTexto(produto.nome);
-        const mnem = normalizarTexto(produto.mnem);
-        const preco = produto.preco.toLowerCase();
-
-        return (
-          nome.includes(termo) ||
-          mnem.includes(termo) ||
-          preco.includes(termo) ||
-          calcularSimilaridade(nome, termo) > 0.7
-        );
-      });
-
+    function buscarExames() {
+      const termo = removerAcentos(document.getElementById('busca').value.toLowerCase().trim());
+      const resultados = exames.filter(exame =>
+        removerAcentos(exame.nome.toLowerCase()).includes(termo) ||
+        removerAcentos(exame.mnem.toLowerCase()).includes(termo)
+      );
       exibirResultados(resultados);
     }
 
-    function exibirResultados(produtos) {
-      const resultadosTabela = document.getElementById('resultados').querySelector('tbody');
-      resultadosTabela.innerHTML = '';
+    function removerAcentos(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
 
-      if (produtos.length === 0) {
-        resultadosTabela.innerHTML = '<tr><td colspan="3">Nenhum exame encontrado.</td></tr>';
-        return;
+    function exibirResultados(lista) {
+      const tbody = document.getElementById('resultados');
+      tbody.innerHTML = '';
+      if (lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3">Nenhum exame encontrado</td></tr>';
+      } else {
+        lista.forEach(exame => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${exame.nome}</td>
+            <td>${exame.mnem || '-'}</td>
+            <td>R$ ${exame.valor.toFixed(2)}</td>
+          `;
+          tr.addEventListener('click', () => adicionarAoSelecionados(exame));
+          tbody.appendChild(tr);
+        });
       }
+    }
 
-      produtos.forEach(produto => {
-        const linha = document.createElement('tr');
-        linha.innerHTML = `
-          <td>${produto.nome}</td>
-          <td>${produto.mnem}</td>
-          <td>${produto.preco}</td>
+    function adicionarAoSelecionados(exame) {
+      selecionados.unshift(exame);
+      total += exame.valor;
+      atualizarSelecionados();
+    }
+
+    function removerSelecionado(index) {
+      total -= selecionados[index].valor;
+      selecionados.splice(index, 1);
+      atualizarSelecionados();
+    }
+
+    function limparSelecionados() {
+      total = 0;
+      selecionados.length = 0;
+      atualizarSelecionados();
+    }
+
+    function atualizarSelecionados() {
+      const ul = document.getElementById('lista-selecionados');
+      ul.innerHTML = '';
+      selecionados.forEach((exame, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span>${exame.nome} (${exame.mnem || '-'}) - R$ ${exame.valor.toFixed(2)}</span>
+          <button onclick="removerSelecionado(${index})">Remover</button>
         `;
-        resultadosTabela.appendChild(linha);
+        ul.appendChild(li);
       });
+      document.getElementById('texto-total').innerText = `Total: R$ ${total.toFixed(2)}`;
     }
-
-    function normalizarTexto(texto) {
-      return texto
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-    }
-
-    function calcularSimilaridade(a, b) {
-      const distancia = calcularDistanciaLevenshtein(a, b);
-      const comprimentoMax = Math.max(a.length, b.length);
-      return comprimentoMax === 0 ? 1.0 : (1.0 - distancia / comprimentoMax);
-    }
-
-    function calcularDistanciaLevenshtein(a, b) {
-      const matriz = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
-      for (let i = 0; i <= a.length; i++) matriz[i][0] = i;
-      for (let j = 0; j <= b.length; j++) matriz[0][j] = j;
-
-      for (let i = 1; i <= a.length; i++) {
-        for (let j = 1; j <= b.length; j++) {
-          const custoSubstituicao = a[i - 1] === b[j - 1] ? 0 : 1;
-          matriz[i][j] = Math.min(
-            matriz[i - 1][j] + 1,
-            matriz[i][j - 1] + 1,
-            matriz[i - 1][j - 1] + custoSubstituicao
-          );
-        }
-      }
-      return matriz[a.length][b.length];
-    }
-
-    window.onload = carregarProdutosIniciais;
   </script>
 </body>
+
 </html>
